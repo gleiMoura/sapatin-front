@@ -1,12 +1,10 @@
-import { useState } from 'react'
-import './App.css'
+import './App.css';
+import { InicialPage } from './pages/InicialPage';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <>
-   
+      <InicialPage />
     </>
   )
 }

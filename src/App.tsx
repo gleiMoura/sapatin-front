@@ -1,10 +1,15 @@
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
 import { InicialPage } from './pages/InicialPage';
 
 function App() {
   return (
     <>
-      <InicialPage />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<InicialPage />} />
+        </Routes>
+      </BrowserRouter>
     </>
   )
 }

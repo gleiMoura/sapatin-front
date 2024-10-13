@@ -6,10 +6,12 @@ import { FC } from "react";
 import { UserDataType } from "../interfaces";
 
 interface PropsTopBar {
-    userData: UserDataType
+    userData: UserDataType,
+    withEnter?: boolean,
+    withBag?: boolean
 }
 
-export const TopBar: FC<PropsTopBar> = ({ userData }) => {
+export const TopBar: FC<PropsTopBar> = ({ userData, withEnter, withBag }) => {
     return (
         <TopBarHeader>
             <section className="topbar_section">
@@ -17,10 +19,13 @@ export const TopBar: FC<PropsTopBar> = ({ userData }) => {
                     <Link to={"/"}>sapatin</Link>
                 </div>
                 <div className="bag">
-                    {(userData.name) ? <Link to="/profile">{userData.name}</Link> : <Link to={"/login"}>Entrar</Link>}
-                    <Link to={"/bag"}>
-                        <FaShoppingBag size={30} />
-                    </Link>
+                    {(userData.name) ? <Link to="/profile">{withEnter && userData.name}</Link> : <Link to={"/login"}>{withEnter && 'Entrar'}</Link>}
+                    {
+                        withBag &&
+                        <Link to={"/bag"}>
+                            <FaShoppingBag size={30} />
+                        </Link>
+                    }
                 </div>
             </section>
             <Categories />
@@ -62,4 +67,3 @@ const TopBarHeader = styled.header`
         font-weight: 500;
     }
 `
-

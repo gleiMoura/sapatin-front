@@ -74,4 +74,47 @@ const LoginContainer = styled.div`
     display: flex;
     justify-content: center;
 
+    .hide{
+        display: none
+    }
+
+    form{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+    }
+    input{
+        width: 326px;
+        height: 58px;
+        background-color: #FFF;
+        border: 1px solid #D4D4D4;
+        padding: 10px;
+        text-align: left;
+        margin-bottom: 13px;
+        font-family: 'Raleway';
+        font-size: 20px;
+        border-radius: 5px;
+        color: #000;
+    }
+    input:placeholder-shown{
+        font-family: 'Raleway';
+    }
+    button{
+        width: 326px;
+        height: 46px;
+        background-color: #000;
+        border-radius: 5px;
+        margin-bottom: 25px;
+        cursor: pointer;
+        font-family: 'Raleway';
+        font-weight: 700;
+        font-size: 20px;
+        color: white;
+        border: none;
+    }
+   a{
+    color: black;
+    font-weight: 600;
+   }
 `

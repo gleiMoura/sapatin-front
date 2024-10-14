@@ -2,6 +2,7 @@ import { FC, ReactNode } from "react"
 import styled from "styled-components";
 import { TopBar } from "./TopBar";
 import { Footer } from "./Footer";
+import { Message } from "./Message";
 
 interface StaticPageProps {
     children: ReactNode;
@@ -16,6 +17,7 @@ export const StaticPage: FC<StaticPageProps> = ({ children, withBag, withEnter }
 
     return (
         <Container>
+            <Message />
             <TopBar withBag={withBag} withEnter={withEnter} userData={userData} />
             {children}
             <Footer />
@@ -27,6 +29,7 @@ const Container = styled.main`
     width: 100%;
     height: 100vh;
     background-color: darkgray;
+    position: relative;
 
     a{
         text-decoration: none;

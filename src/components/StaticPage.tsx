@@ -1,8 +1,9 @@
-import { FC, ReactNode } from "react"
 import styled from "styled-components";
+import { FC, ReactNode } from "react"
 import { TopBar } from "./TopBar";
 import { Footer } from "./Footer";
 import { Message } from "./Message";
+import { getByStorage } from "../hooks/useLocalStorage";
 
 interface StaticPageProps {
     children: ReactNode;
@@ -11,9 +12,7 @@ interface StaticPageProps {
 };
 
 export const StaticPage: FC<StaticPageProps> = ({ children, withBag, withEnter }) => {
-    const dataStorage = localStorage.getItem("userInformation");
-
-    const userData = dataStorage ? JSON.parse(dataStorage) : [];
+    const userData = getByStorage("userInformation") || [];;
 
     return (
         <Container>

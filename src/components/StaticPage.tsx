@@ -12,7 +12,7 @@ interface StaticPageProps {
 };
 
 export const StaticPage: FC<StaticPageProps> = ({ children, withBag, withEnter }) => {
-    const userData = getByStorage("userInformation") || [];;
+    const userData = getByStorage("userData") || [];;
 
     return (
         <Container>

@@ -1,12 +1,16 @@
-import { ChangeEvent, FC, useState } from "react";
+import { ChangeEvent, FC, FormEvent, useState } from "react";
 import { ThreeDots } from 'react-loader-spinner';
 import { useNavigate, Link } from "react-router-dom";
 import { StaticPage } from "../components/StaticPage";
 import styled from "styled-components";
 import { CredentialsType } from "../interfaces";
 import doLogin from "../services/doLogin";
+import { useMessageContext } from "../contexts/MessageContext";
+import { setByStorage } from "../hooks/useLocalStorage";
 
 export const LoginPage: FC = () => {
+    const messageContext = useMessageContext();
+    const { setMessage } = messageContext;
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loadButton, setLoadButton] = useState(true);
@@ -20,16 +24,19 @@ export const LoginPage: FC = () => {
         setPassword(e.target.value);
     };
 
-    const handleDoLogin = async () => {
+    const handleDoLogin = async (e: FormEvent) => {
+        e.preventDefault();
         const credentials: CredentialsType = { email, password };
         if (!email || !password) {
-            alert("Preencha os dois campos!");
+            setMessage({ text: "Preencha todos os campos!", type: "login" })
             return
         }
 
         try {
             setLoadButton(false);
-            await doLogin(credentials);
+            const res = await doLogin(credentials);
+            setByStorage("userData", res.data)
+            setMessage({ text: "Login efetuado com sucesso!", type: "login" })
             navigate("/");
         } catch (error) {
             console.log("Erro ao tentar fazer login!", error);
@@ -41,8 +48,9 @@ export const LoginPage: FC = () => {
 
     return (
         <StaticPage children={
-            <LoginContainer>
+            <SignContainer>
                 <form>
+                    <h1>Faça seu Login</h1>
                     <input type="email" id='email' placeholder='email' required onChange={handleGetEmail} />
                     <input type="password" id="password" placeholder='senha' required onChange={handleGetPassword} />
 
@@ -62,12 +70,12 @@ export const LoginPage: FC = () => {
                         </Link>
                     </p>
                 </form>
-            </LoginContainer>
+            </SignContainer>
         } />
     )
 }
 
-const LoginContainer = styled.div`
+export const SignContainer = styled.div`
     width: 100%;
     height: 400px;
     margin-top: 30px;
@@ -84,9 +92,14 @@ const LoginContainer = styled.div`
             justify-content: center;
             align-items: center;
     }
+    form h1{
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+        font-weight: 600;
+    }
     input{
         width: 326px;
-        height: 58px;
+        height: 40px;
         background-color: #FFF;
         border: 1px solid #D4D4D4;
         padding: 10px;
@@ -112,6 +125,11 @@ const LoginContainer = styled.div`
         font-size: 20px;
         color: white;
         border: none;
+    }
+    .loading{
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
    a{
     color: black;

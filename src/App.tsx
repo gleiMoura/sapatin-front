@@ -4,6 +4,7 @@ import { InicialPage } from './pages/InicialPage';
 import { LoginPage } from './pages/LoginPage';
 import { RegisterPage } from './pages/RegisterPage';
 import { MessageProvider } from './contexts/MessageContext';
+import { ProfilePage } from './pages/ProfilePage';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
             <Route path="/" element={<InicialPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path='/register' element={<RegisterPage />} />
+            <Route path='/profile' element={<ProfilePage />} />
           </Routes>
         </MessageProvider>
       </BrowserRouter>

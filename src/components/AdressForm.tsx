@@ -10,12 +10,14 @@ interface AdressFormProps {
 export const AdressForm: FC<AdressFormProps> = ({ popUp, setPopUp }) => {
     const [loadButton] = useState<boolean>(true);
 
+    const handleClosePopUp = () => {
+        setPopUp(false)
+    }
+
     return (
-        <AdressContainer popUp={popUp} onClick={() => {
-            setPopUp(false)
-        }}>
-            <form>
-                <div className="close">
+        <AdressContainer popUp={popUp} onClick={handleClosePopUp}>
+            <form onClick={(e) => e.stopPropagation()}>
+                <div className="close" onClick={handleClosePopUp}>
                     <p>
                         X
                     </p>
@@ -65,7 +67,7 @@ const AdressContainer = styled.div<{ popUp: boolean }>`
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        position: relative;
+        position: absolute;
     }
 
     form h1{

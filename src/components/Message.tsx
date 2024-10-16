@@ -20,7 +20,7 @@ export const Message: FC = () => {
 
     return (
         <MessageContainer type={message.type}>
-            <p>Login efetuado com sucesso!</p>
+            <p>{message.text}</p>
         </MessageContainer>
     )
 };

@@ -1,25 +1,34 @@
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { Categories } from "./Categories";
 import styled from "styled-components";
 import { FaShoppingBag } from "react-icons/fa";
 import { FC } from "react";
 import { UserDataType } from "../interfaces";
+import { setByStorage } from "../hooks/useLocalStorage";
 
 interface PropsTopBar {
     userData: UserDataType,
     withEnter?: boolean,
-    withBag?: boolean
+    withBag?: boolean,
+    withLogout?: boolean
 }
 
-export const TopBar: FC<PropsTopBar> = ({ userData, withEnter, withBag }) => {
+export const TopBar: FC<PropsTopBar> = ({ userData, withEnter, withBag, withLogout }) => {
+    const navigate = useNavigate();
     return (
         <TopBarHeader>
             <section className="topbar_section">
                 <div className="title">
                     <Link to={"/"}>sapatin</Link>
                 </div>
-                <div className="bag">
+                <div className="user_area">
                     {(userData.name) ? <Link to="/profile">{withEnter && userData.name}</Link> : <Link to={"/login"}>{withEnter && 'Entrar'}</Link>}
+                    {withLogout && <div className="logout" onClick={() => {
+                        setByStorage("userData", "");
+                        navigate("/")
+                    }}>
+                        Sair
+                    </div>}
                     {
                         withBag &&
                         <Link to={"/bag"}>
@@ -55,15 +64,16 @@ const TopBarHeader = styled.header`
         font-weight: 700;
     }
 
-    .bag{
+    .user_area{
         width: 150px;
         display: flex;
         justify-content: space-around;
         align-items: center;
     }
 
-    .bag a{
+    .user_area,.logout a{
         font-size: 1.2rem;
         font-weight: 500;
+        cursor: pointer;
     }
 `

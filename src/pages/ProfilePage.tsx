@@ -4,15 +4,27 @@ import { getByStorage } from "../hooks/useLocalStorage";
 import { useState } from "react";
 import { AdressForm } from "../components/AdressForm";
 
+interface productType {
+    name: string,
+    image: string,
+    brand: string,
+    value: string
+};
+interface purchaseType {
+    products: productType[];
+    total: string,
+    status: string
+}
+
 export const ProfilePage = () => {
-    const { adress } = getByStorage("userData");
+    const { adress, history } = getByStorage("userData");
     const [popUp, setPopUp] = useState<boolean>(false);
 
     const handleOpenPopUp = () => {
         setPopUp(true);
     }
     return (
-        <StaticPage withEnter children={
+        <StaticPage withEnter withLogout children={
             <ProfileContainer>
                 <AdressForm popUp={popUp} setPopUp={setPopUp} />
                 <div className="data">
@@ -20,6 +32,28 @@ export const ProfilePage = () => {
                         <p>{adress ? adress : "Você ainda não possui um endereço cadastrado!"}</p>
                     </div>
                     <button onClick={handleOpenPopUp}>{adress ? "Mudar endereço" : "cadastrar endereço"}</button>
+                </div>
+                <div className="history">
+                    {!history ? <p>Você ainda não possui compras!</p> : history.map((purchase: purchaseType) => {
+                        const products: productType[] = purchase?.products;
+                        return (
+                            <div className="purchase">
+                                {products.map((product: productType) => {
+                                    return (
+                                        <div className="product">
+                                            <img src={product.image} alt="" />
+                                            <div className="content">
+                                                <p>{product.name}</p>
+                                                <p>{product.brand}</p>
+                                                <p>{product.value}</p>
+                                            </div>
+                                        </div>
+                                    )
+                                })}
+                            </div>
+
+                        )
+                    })}
                 </div>
             </ProfileContainer>
         } />
@@ -31,6 +65,8 @@ const ProfileContainer = styled.div`
     height: 400px;
     margin-top: 30px;
     display: flex;
+    flex-direction: column;
+    align-items: center;
 
     .data{
         width: 100%;
@@ -72,5 +108,19 @@ const ProfileContainer = styled.div`
     button:hover{
         background-color: black;
         color:white;
+    }
+
+    .history{
+        width: 100%;
+        height: auto;
+        min-height: 400px;
+        padding: 20px;
+        box-sizing: border-box;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.2rem;
+        font-weight: 700;
     }
 `;

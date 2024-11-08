@@ -8,16 +8,17 @@ import { getByStorage } from "../hooks/useLocalStorage";
 interface StaticPageProps {
     children: ReactNode;
     withEnter?: boolean,
-    withBag?: boolean
+    withBag?: boolean,
+    withLogout?: boolean
 };
 
-export const StaticPage: FC<StaticPageProps> = ({ children, withBag, withEnter }) => {
+export const StaticPage: FC<StaticPageProps> = ({ children, withBag, withEnter, withLogout }) => {
     const userData = getByStorage("userData") || [];;
 
     return (
         <Container>
             <Message />
-            <TopBar withBag={withBag} withEnter={withEnter} userData={userData} />
+            <TopBar withBag={withBag} withEnter={withEnter} userData={userData} withLogout={withLogout} />
             {children}
             <Footer />
         </Container>

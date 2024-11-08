@@ -53,7 +53,8 @@ export const RegisterPage: FC = () => {
             setMessage({ text: "Registro efetuado com sucesso!", type: "Registro" })
             navigate("/login");
         } catch (error) {
-            console.log("Erro ao tentar fazer login!", error);
+            console.log("Erro ao tentar fazer Registro!", error);
+            setMessage({ text: "Usuário já cadastrado!", type: "registro" })
             console.error(error);
         } finally {
             setLoadButton(true)

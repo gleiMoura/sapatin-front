@@ -40,6 +40,7 @@ export const LoginPage: FC = () => {
             navigate("/");
         } catch (error) {
             console.log("Erro ao tentar fazer login!", error);
+            setMessage({ text: "Usuário ou senha inválido.", type: "error" })
             console.error(error);
         } finally {
             setLoadButton(true)

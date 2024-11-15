@@ -1,17 +1,62 @@
-import { FC, useState, SetStateAction, Dispatch } from "react";
+import { FC, useState, SetStateAction, Dispatch, ChangeEvent, FormEvent } from "react";
 import { ThreeDots } from "react-loader-spinner";
 import styled from "styled-components";
-
+import { AdressType } from "../interfaces";
+import saveAdress from "../services/saveAdress";
+import { setByStorage } from "../hooks/useLocalStorage";
+import { useMessageContext } from "../contexts/MessageContext";
 interface AdressFormProps {
     popUp: boolean,
     setPopUp: Dispatch<SetStateAction<boolean>>
 }
 
 export const AdressForm: FC<AdressFormProps> = ({ popUp, setPopUp }) => {
-    const [loadButton] = useState<boolean>(true);
+    const [loadButton, setLoadButton] = useState<boolean>(true);
+    const [adress, setAdress] = useState<AdressType>({
+        street: "",
+        number: "",
+        city: "",
+        state: "",
+        cep: "",
+        more: ""
+    });
+    const messageContext = useMessageContext();
+    const { setMessage } = messageContext;
 
     const handleClosePopUp = () => {
         setPopUp(false)
+    };
+
+    const handleGetAdress = async (e: ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+
+        setAdress((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+    };
+
+    const handleSaveAdress = async (e: FormEvent) => {
+        e.preventDefault();
+
+
+        if (!/^\d{5}-\d{3}$/.test(adress.cep)) {
+            setMessage({ text: "Formato de CEP inválido!", type: "Endereço" });
+            return
+        };
+        try {
+            setLoadButton(false);
+            const res = await saveAdress(adress);;
+            setByStorage("userAdress", res.data)
+            setMessage({ text: "Endereço salvo com sucesso!", type: "Endereço" });
+            handleClosePopUp();
+        } catch (error) {
+            console.log("Erro ao tentar salvar endereço!", error);
+            setMessage({ text: "Erro ao tentar salvar endereço.", type: "error" })
+            console.error(error);
+        } finally {
+            setLoadButton(true)
+        }
     }
 
     return (
@@ -23,13 +68,14 @@ export const AdressForm: FC<AdressFormProps> = ({ popUp, setPopUp }) => {
                     </p>
                 </div>
                 <h1>Dados de endereço</h1>
-                <input type="text" id='street_name' placeholder='Nome da Rua' required />
-                <input type="number" id='street_number' placeholder='número' required />
-                <input type="text" id="city" placeholder='cidade' />
-                <input type="text" id="state" placeholder='estado' required />
-                <input type="text" id="more" placeholder='complemento' required />
+                <input type="text" id='street' name="street" placeholder='Nome da Rua' required onChange={handleGetAdress} />
+                <input type="number" id='number' name="number" placeholder='número' required onChange={handleGetAdress} />
+                <input type="text" id="city" name="city" placeholder='cidade' onChange={handleGetAdress} />
+                <input type="text" id="state" name="state" placeholder='estado' required onChange={handleGetAdress} />
+                <input type="text" id="more" name="more" placeholder='complemento' required onChange={handleGetAdress} />
+                <input type="text" id="cep" name="cep" placeholder='cep xxxxx-xxx' required onChange={handleGetAdress} />
 
-                <button className={loadButton ? "" : "hide"} >Enviar</button>
+                <button className={loadButton ? "" : "hide"} onClick={handleSaveAdress}>Enviar</button>
 
                 <button className={loadButton ? "hide" : "loading"}>
                     <ThreeDots

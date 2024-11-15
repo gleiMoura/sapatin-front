@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import { StaticPage } from "../components/StaticPage";
 import { getByStorage } from "../hooks/useLocalStorage";
-import { useState } from "react";
+import { FC, useState } from "react";
 import { AdressForm } from "../components/AdressForm";
+import { AdressType } from "../interfaces";
 
 interface productType {
     name: string,
@@ -17,20 +18,33 @@ interface purchaseType {
 }
 
 export const ProfilePage = () => {
-    const { adress, history } = getByStorage("userData");
+    const { history } = getByStorage("userData");
+    const adress: AdressType = getByStorage("userAdress");
     const [popUp, setPopUp] = useState<boolean>(false);
 
     const handleOpenPopUp = () => {
         setPopUp(true);
+    };
+
+    const AdressComponent: FC = () => {
+        return (
+            <>
+                <p>Rua: {adress?.street}</p>
+                <p>Número: {adress?.number}</p>
+                <p>cep: {adress?.cep}</p>
+                <p>Complemento: {adress?.more || ""}</p>
+                <p>Cidade: {adress?.city}</p>
+                <p>Estado: {adress?.state}</p>
+            </>
+
+        )
     }
     return (
         <StaticPage withEnter withLogout children={
             <ProfileContainer>
                 <AdressForm popUp={popUp} setPopUp={setPopUp} />
-                <div className="data">
-                    <div className="adress">
-                        <p>{adress ? adress : "Você ainda não possui um endereço cadastrado!"}</p>
-                    </div>
+                <div className="adress">
+                    {adress ? <AdressComponent /> : <p>Você ainda não possui um endereço cadastrado!</p>}
                     <button onClick={handleOpenPopUp}>{adress ? "Mudar endereço" : "cadastrar endereço"}</button>
                 </div>
                 <div className="history">
@@ -62,31 +76,36 @@ export const ProfilePage = () => {
 
 const ProfileContainer = styled.div`
     width: 100%;
-    height: 400px;
-    margin-top: 30px;
+    min-height: calc(100vh - 125px);
     display: flex;
     flex-direction: column;
     align-items: center;
 
-    .data{
-        width: 100%;
-        display: flex;
-        justify-content: center;
-    }
-
     .adress{
-        width: auto;
-        height: 50px;
+        width: 500px;
+        margin-top: 30px;
         padding: 20px;
         box-sizing: border-box;
         font-size: 1rem;
         font-weight: 600;
-        text-align: center;
+        text-align: start;
         background-color: black;
-        color: white;
         border: none;
-        cursor: pointer;
         border-right: 1px solid darkgray;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+    }
+
+    .adress p {
+        width: 200px;
+        height: 50px;
+        margin-bottom: 10px;
+        background-color: white;
+        padding: 5px;
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
     }
 
     button{
@@ -112,8 +131,6 @@ const ProfileContainer = styled.div`
 
     .history{
         width: 100%;
-        height: auto;
-        min-height: 400px;
         padding: 20px;
         box-sizing: border-box;
         display: flex;

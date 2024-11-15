@@ -11,23 +11,24 @@ import { setByStorage } from "../hooks/useLocalStorage";
 export const LoginPage: FC = () => {
     const messageContext = useMessageContext();
     const { setMessage } = messageContext;
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [credentials, setCredentials] = useState<CredentialsType>({
+        email: "",
+        password: ""
+    });
     const [loadButton, setLoadButton] = useState(true);
     const navigate = useNavigate();
 
-    const handleGetEmail = (e: ChangeEvent<HTMLInputElement>) => {
-        setEmail(e.target.value)
-    };
-
-    const handleGetPassword = (e: ChangeEvent<HTMLInputElement>) => {
-        setPassword(e.target.value);
-    };
+    const handleCredentials = (e: ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setCredentials((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+    }
 
     const handleDoLogin = async (e: FormEvent) => {
         e.preventDefault();
-        const credentials: CredentialsType = { email, password };
-        if (!email || !password) {
+        if (!credentials.email || !credentials.password) {
             setMessage({ text: "Preencha todos os campos!", type: "login" })
             return
         }
@@ -52,8 +53,8 @@ export const LoginPage: FC = () => {
             <SignContainer>
                 <form>
                     <h1>Faça seu Login</h1>
-                    <input type="email" id='email' placeholder='email' required onChange={handleGetEmail} />
-                    <input type="password" id="password" placeholder='senha' required onChange={handleGetPassword} />
+                    <input type="email" id='email' placeholder='email' required onChange={handleCredentials} />
+                    <input type="password" id="password" placeholder='senha' required onChange={handleCredentials} />
 
                     <button className={loadButton ? "" : "hide"} onClick={handleDoLogin}>Entrar</button>
 

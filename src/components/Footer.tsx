@@ -26,12 +26,12 @@ export const Footer: FC = () => {
 
 const FooterContainer = styled.div`
     width: 100%;
-    height: auto;
     margin-top: 30px;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    background-color: white;
     
     .main{
         height: 100%;

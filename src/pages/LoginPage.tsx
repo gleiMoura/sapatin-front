@@ -7,6 +7,7 @@ import { CredentialsType } from "../interfaces";
 import doLogin from "../services/doLogin";
 import { useMessageContext } from "../contexts/MessageContext";
 import { setByStorage } from "../hooks/useLocalStorage";
+import getAdress from "../services/getAdress";
 
 export const LoginPage: FC = () => {
     const messageContext = useMessageContext();
@@ -24,7 +25,7 @@ export const LoginPage: FC = () => {
             ...prevData,
             [name]: value,
         }));
-    }
+    };
 
     const handleDoLogin = async (e: FormEvent) => {
         e.preventDefault();
@@ -36,7 +37,10 @@ export const LoginPage: FC = () => {
         try {
             setLoadButton(false);
             const res = await doLogin(credentials);
-            setByStorage("userData", res.data)
+            setByStorage("userData", res.data);
+            const adress = await getAdress();
+            console.log(adress)
+            setByStorage("userAdress", adress.data);
             setMessage({ text: "Login efetuado com sucesso!", type: "login" })
             navigate("/");
         } catch (error) {
@@ -46,15 +50,15 @@ export const LoginPage: FC = () => {
         } finally {
             setLoadButton(true)
         }
-    }
+    };
 
     return (
         <StaticPage children={
             <SignContainer>
                 <form>
                     <h1>Faça seu Login</h1>
-                    <input type="email" id='email' placeholder='email' required onChange={handleCredentials} />
-                    <input type="password" id="password" placeholder='senha' required onChange={handleCredentials} />
+                    <input type="email" id='email' name="email" placeholder='email' required onChange={handleCredentials} />
+                    <input type="password" id="password" name="password" placeholder='senha' required onChange={handleCredentials} />
 
                     <button className={loadButton ? "" : "hide"} onClick={handleDoLogin}>Entrar</button>
 
@@ -75,11 +79,11 @@ export const LoginPage: FC = () => {
             </SignContainer>
         } />
     )
-}
+};
 
 export const SignContainer = styled.div`
     width: 100%;
-    height: 400px;
+    height: calc(100vh - 125px);
     margin-top: 30px;
     display: flex;
     justify-content: center;

@@ -24,7 +24,7 @@ export const TopBar: FC<PropsTopBar> = ({ userData, withEnter, withBag, withLogo
                 <div className="user_area">
                     {(userData.name) ? <Link to="/profile">{withEnter && userData.name}</Link> : <Link to={"/login"}>{withEnter && 'Entrar'}</Link>}
                     {withLogout && <div className="logout" onClick={() => {
-                        setByStorage("userData", "");
+                        localStorage.clear();
                         navigate("/")
                     }}>
                         Sair

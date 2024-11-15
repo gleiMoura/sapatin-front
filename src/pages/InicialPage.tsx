@@ -4,7 +4,7 @@ import { StaticPage } from "../components/StaticPage";
 
 export const InicialPage: FC = () => {
     return (
-        <StaticPage withEnter withBag children={
+        <StaticPage withEnter withBag withFooter children={
             <Promotion />
         } />
     )

@@ -44,7 +44,7 @@ const MessageContainer = styled.div<{ type: string }>`
   align-items: center;
   position: fixed;
   right: 20px; /* Define a posição inicial para a animação */
-  top: 20px;
+  top: 70px;
   color: black;
   font-weight: 700;
   animation: ${slideIn} 1s ease-out forwards; /* Animação de 1 segundo */

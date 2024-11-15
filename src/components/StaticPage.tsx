@@ -9,10 +9,11 @@ interface StaticPageProps {
     children: ReactNode;
     withEnter?: boolean,
     withBag?: boolean,
-    withLogout?: boolean
+    withLogout?: boolean,
+    withFooter?: boolean
 };
 
-export const StaticPage: FC<StaticPageProps> = ({ children, withBag, withEnter, withLogout }) => {
+export const StaticPage: FC<StaticPageProps> = ({ children, withBag, withEnter, withLogout, withFooter }) => {
     const userData = getByStorage("userData") || [];;
 
     return (
@@ -20,14 +21,14 @@ export const StaticPage: FC<StaticPageProps> = ({ children, withBag, withEnter, 
             <Message />
             <TopBar withBag={withBag} withEnter={withEnter} userData={userData} withLogout={withLogout} />
             {children}
-            <Footer />
+            {withFooter ? <Footer /> : ""}
         </Container>
     )
 };
 
 const Container = styled.main`
     width: 100%;
-    height: 100vh;
+    height: auto;
     background-color: darkgray;
     position: relative;
 
